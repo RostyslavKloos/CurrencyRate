@@ -4,10 +4,12 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.Layout
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.TEXT_ALIGNMENT_GRAVITY
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -180,6 +182,7 @@ class CurrencyStateFragment : Fragment(){
             // Create currency name TextView
             val tv1 = TextView(requireContext())
             tv1.text = responseNBU[i].txt
+            tv1.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
             setTextViewParams(tv1)
 
             //check for necessary currency
@@ -194,6 +197,7 @@ class CurrencyStateFragment : Fragment(){
             // Create currency rate TextView
             val tv2 = TextView(requireContext())
             tv2.text = roundDoubleTo(responseNBU[i].rate, 2)
+            tv2.textAlignment = View.TEXT_ALIGNMENT_VIEW_END
             setTextViewParams(tv2)
 
             tableRow.addView(tv2)
@@ -229,6 +233,7 @@ class CurrencyStateFragment : Fragment(){
             tv3.text = roundDoubleTo(responsePB[i].saleRate, 3)
             tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
             setTextViewParams(tv3)
+
             tableRow.addView(tv3)
 
             tableRow.setOnClickListener {
@@ -240,10 +245,11 @@ class CurrencyStateFragment : Fragment(){
     }
 
     private fun setTextViewParams(textView: TextView) {
-        val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-        textView.setTextColor(Color.BLACK)
-        textView.gravity = Gravity.CENTER
-        textView.layoutParams = params
+        textView.apply {
+            setTextColor(Color.BLACK)
+            gravity = Gravity.CENTER
+            layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+        }
     }
 
 
