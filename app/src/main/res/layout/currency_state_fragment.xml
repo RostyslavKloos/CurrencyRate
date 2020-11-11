@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_mainLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_viewColorStatePB"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <TextView
+            android:id="@+id/tv_viewColorStateNBU"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            />
+
+        <TableLayout
+                android:id="@+id/tl_privatBank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                >
+
+                <TableRow android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Приват Банк" />
+
+                    <ImageButton
+                        android:id="@+id/ib_datePickerPB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_baseline_calendar_today_24" />
+
+                    <TextView
+                        android:id="@+id/tv_datePB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        />
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#F0F7F7"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Валюта"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Покупка"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Продажа"
+                        android:textAlignment="center" />
+                </TableRow>
+
+                <ProgressBar
+                    android:id="@+id/pb_progressBarPB"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+            </TableLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_linearLayoutNBU"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:id="@+id/tl_NationalBankHeader"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_height="wrap_content"
+               >
+
+
+                <TableRow android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_test"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:text="НБУ"
+                        />
+
+                    <ImageButton
+                        android:id="@+id/ib_datePickerNBU"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:backgroundTint="@color/white"
+                        android:src="@drawable/ic_baseline_calendar_today_24" />
+
+                    <TextView
+                        android:id="@+id/tv_dateNBU"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                      />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <ProgressBar
+                android:id="@+id/pb_progressBarNBU"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <ScrollView
+                android:id="@+id/sv_scrollViewNBU"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:visibility="invisible">
+
+                <TableLayout
+                    android:id="@+id/tl_NationalBank"
+                    android:padding="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                </TableLayout>
+
+            </ScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
