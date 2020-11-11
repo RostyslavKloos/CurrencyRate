@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -176,13 +177,10 @@ class CurrencyStateFragment : Fragment(){
         for (i in responseNBU.indices) {
             val tableRow = TableRow(requireContext())
 
-            val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-
             // Create currency name TextView
             val tv1 = TextView(requireContext())
             tv1.text = responseNBU[i].txt
-            tv1.setTextColor(Color.BLACK)
-            tv1.gravity = Gravity.CENTER
+            setTextViewParams(tv1)
 
             //check for necessary currency
             when (responseNBU[i].txt) {
@@ -190,15 +188,13 @@ class CurrencyStateFragment : Fragment(){
                 "Євро" -> tableRow.id = R.id.tv_eur
                 "Російський рубль" -> tableRow.id = R.id.tv_rur
             }
-            tv1.layoutParams = params
 
             tableRow.addView(tv1)
 
             // Create currency rate TextView
             val tv2 = TextView(requireContext())
             tv2.text = roundDoubleTo(responseNBU[i].rate, 2)
-            tv2.gravity = Gravity.CENTER
-            tv2.layoutParams = params
+            setTextViewParams(tv2)
 
             tableRow.addView(tv2)
 
@@ -212,31 +208,27 @@ class CurrencyStateFragment : Fragment(){
         for (i in responsePB.indices) {
             val tableRow = TableRow(requireContext())
 
-            val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
-
             // Create currency name TextView
             val tv1 = TextView(requireContext())
             tv1.text = responsePB[i].currency
-            tv1.setTextColor(Color.BLACK)
-            tv1.gravity = Gravity.CENTER
-            tv1.layoutParams = params
+            tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
+            setTextViewParams(tv1)
 
             tableRow.addView(tv1)
 
             // Create currency purchase rate TextView
             val tv2 = TextView(requireContext())
-            tv2.text = roundDoubleTo(responsePB[i].purchaseRate, 2)
-            tv2.gravity = Gravity.CENTER
-            tv2.layoutParams = params
+            tv2.text = roundDoubleTo(responsePB[i].purchaseRate, 3)
+            tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
+            setTextViewParams(tv2)
 
             tableRow.addView(tv2)
 
             // Create currency sale rate TextView
             val tv3 = TextView(requireContext())
-            val value = roundDoubleTo(responsePB[i].saleRate, 2)
-            tv3.text = value
-            tv3.gravity = Gravity.CENTER
-            tv3.layoutParams = params
+            tv3.text = roundDoubleTo(responsePB[i].saleRate, 3)
+            tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
+            setTextViewParams(tv3)
             tableRow.addView(tv3)
 
             tableRow.setOnClickListener {
@@ -246,6 +238,14 @@ class CurrencyStateFragment : Fragment(){
             binding.tlPrivatBank.addView(tableRow)
         }
     }
+
+    private fun setTextViewParams(textView: TextView) {
+        val params = TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+        textView.setTextColor(Color.BLACK)
+        textView.gravity = Gravity.CENTER
+        textView.layoutParams = params
+    }
+
 
     // Shows equal NBU currency to selected PB row
     private fun transformView(view: View){

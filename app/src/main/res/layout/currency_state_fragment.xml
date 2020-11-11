@@ -38,7 +38,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Приват Банк" />
+                        android:text="@string/Privat_Bank" />
 
                     <ImageButton
                         android:id="@+id/ib_datePickerPB"
@@ -65,21 +65,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Валюта"
+                        android:text="@string/Currency"
                         android:textAlignment="center" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Покупка"
+                        android:text="@string/Purchase"
                         android:textAlignment="center" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Продажа"
+                        android:text="@string/Sale"
                         android:textAlignment="center" />
                 </TableRow>
 
@@ -104,11 +104,11 @@
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:layout_height="wrap_content"
-               >
+                android:layout_height="wrap_content">
 
-
-                <TableRow android:padding="10dp">
+                <TableRow
+                    android:padding="10dp"
+                    >
 
                     <TextView
                         android:id="@+id/tv_test"
@@ -117,7 +117,7 @@
                         android:layout_weight="1"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:text="НБУ"
+                        android:text="@string/NBU"
                         />
 
                     <ImageButton
@@ -125,7 +125,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:backgroundTint="@color/white"
-                        android:src="@drawable/ic_baseline_calendar_today_24" />
+                        android:src="@drawable/ic_baseline_calendar_today_24"
+                        android:contentDescription="@string/date_picker_nbu"/>
 
                     <TextView
                         android:id="@+id/tv_dateNBU"

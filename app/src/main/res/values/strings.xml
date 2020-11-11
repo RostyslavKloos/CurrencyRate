@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">DB2Limited_RateCurrency</string>
+    <string name="Privat_Bank">Приват Банк</string>
+    <string name="Currency">Валюта</string>
+    <string name="Purchase">Покупка</string>
+    <string name="Sale">Продажа</string>
+    <string name="NBU">НБУ</string>
+    <string name="date_picker_nbu">Date picker NBU</string>
 
 </resources>
