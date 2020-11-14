@@ -1,18 +1,21 @@
 package ro.dev.db2limited_ratecurrency.ui.fragment
 
+import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.text.Layout
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.TEXT_ALIGNMENT_GRAVITY
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.TableRow
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import ro.dev.db2limited_ratecurrency.R
@@ -21,10 +24,9 @@ import ro.dev.db2limited_ratecurrency.data.model.responsePBbyDate.ExchangeRate
 import ro.dev.db2limited_ratecurrency.databinding.CurrencyStateFragmentBinding
 import ro.dev.db2limited_ratecurrency.ui.viewmodel.CurrencyStateViewModel
 import ro.dev.db2limited_ratecurrency.utills.*
-import java.text.SimpleDateFormat
 import java.util.*
 
-class CurrencyStateFragment : Fragment(){
+class CurrencyStateFragment : Fragment() {
     private var _binding: CurrencyStateFragmentBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CurrencyStateViewModel by viewModels()
@@ -35,30 +37,41 @@ class CurrencyStateFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = CurrencyStateFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupViews()
         setupObservers()
     }
 
     private fun setupObservers() {
         // set currentDate
-        val currentDateTimeNBU = getCurrentDateTime()
-        val currentDateTimePB = getCurrentDateTimePB()
-        viewModel.setDateNBU(currentDateTimeNBU)
-        viewModel.setDatePB(currentDateTimePB)
+        val currentDateTimeNBU = getDateFormatNBU(Date())
+        val currentDateTimePB = getDateFormanPB(Date())
+//        viewModel.setDateNBU(currentDateTimeNBU)
+//        viewModel.setDatePB(currentDateTimePB)
+
+        viewModel.getResponsePB().observe(viewLifecycleOwner, {
+            val response = CurrencyMapper().mapFrom(it.exchangeRate)
+            addTablePB(response)
+        })
+
+        viewModel.getResponseNBU().observe(viewLifecycleOwner, {
+            addTableNBU(it)
+        })
 
         // response from Privat Bank
-        viewModel.currencyResponsePBbyDate.observe(viewLifecycleOwner, {
-            when (it.status) {
+        viewModel.currencyResponsePBbyDate.observe(viewLifecycleOwner, { responsePB ->
+            when (responsePB.status) {
                 Resource.Status.SUCCESS -> {
-                    it.data?.let {
-                        val response = CurrencyMapper().mapFrom(it.exchangeRate)
-                        addTablePB(response)
+                    responsePB.data?.let {
+                        viewModel.saveResponsePB(it)
                         binding.tvDatePB.text = it.date
                         binding.pbProgressBarPB.visibility = View.GONE
                         binding.tlPrivatBank.visibility = View.VISIBLE
@@ -68,19 +81,20 @@ class CurrencyStateFragment : Fragment(){
                     binding.pbProgressBarPB.visibility = View.VISIBLE
                 }
                 Resource.Status.ERROR -> {
-                    binding.tlPrivatBank.visibility = View.VISIBLE
+                    binding.tlPrivatBank.visibility = View.GONE
                     binding.pbProgressBarPB.visibility = View.GONE
-                    Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "${responsePB.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         })
 
         //response from NBU
-        viewModel.currencyResponseNBU.observe(viewLifecycleOwner, {
-            when (it.status) {
+        viewModel.currencyResponseNBU.observe(viewLifecycleOwner, { responseNBU ->
+            when (responseNBU.status) {
                 Resource.Status.SUCCESS -> {
-                    it.data?.let {
-                        addTableNBU(it)
+                    responseNBU.data?.let {
+                        viewModel.saveResponseNBU(it)
                         binding.tvDateNBU.text = it[0].exchangedate
                         binding.pbProgressBarNBU.visibility = View.GONE
                         binding.svScrollViewNBU.visibility = View.VISIBLE
@@ -92,7 +106,8 @@ class CurrencyStateFragment : Fragment(){
                 Resource.Status.ERROR -> {
                     binding.tlNationalBank.visibility = View.VISIBLE
                     binding.pbProgressBarNBU.visibility = View.GONE
-                    Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "${responseNBU.message}", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         })
@@ -103,38 +118,35 @@ class CurrencyStateFragment : Fragment(){
         viewColorStatePB = binding.tvViewColorStatePB
         viewColorStateNBU = binding.tvViewColorStateNBU
 
-        val materialDateBuilderNBU = MaterialDatePicker.Builder.datePicker()
-        materialDateBuilderNBU.setTitleText("ВЫБЕРИТЕ ДАТУ")
-        val materialDatePickerNBU = materialDateBuilderNBU.build()
-
         // Create datePicker NBU
         binding.ibDatePickerNBU.setOnClickListener {
-            materialDatePickerNBU.show(childFragmentManager, "MATERIAL_DATE_PICKER")
-
-            materialDatePickerNBU.addOnPositiveButtonClickListener {
-                val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.ROOT)
-                val formatDate = dateFormat.format(it)
-                viewModel.setDateNBU(formatDate)
-            }
+            createDatePickerDialog(it)
         }
 
-        val materialDateBuilderPB = MaterialDatePicker.Builder.datePicker()
-        materialDateBuilderPB.setTitleText("ВЫБЕРИТЕ ДАТУ")
-        val materialDatePickerPB = materialDateBuilderPB.build()
         // Create datePicker PB
         binding.ibDatePickerPB.setOnClickListener {
-            materialDatePickerPB.show(childFragmentManager, "MATERIAL_DATE_PICKER")
+            createDatePickerDialog(it)
+        }
+    }
 
-            materialDatePickerPB.addOnPositiveButtonClickListener {
-                val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
-                val formatDate = dateFormat.format(it)
-                //delete current items if exist
-                if (binding.tlPrivatBank.childCount > 4)
-                {
-                    binding.tlPrivatBank.removeViews(3,3)
+    private fun createDatePickerDialog(view: View) {
+        val materialDateBuilder = MaterialDatePicker.Builder.datePicker()
+        materialDateBuilder.setTitleText("ВЫБЕРИТЕ ДАТУ")
+        val materialDatePicker = materialDateBuilder.build()
+
+        materialDatePicker.show(childFragmentManager, "MATERIAL_DATE_PICKER")
+        materialDatePicker.addOnPositiveButtonClickListener {
+
+            //delete current items if exist
+            if (view == binding.ibDatePickerPB) {
+                if (binding.tlPrivatBank.childCount > 4) {
+                    binding.tlPrivatBank.removeViews(3, 3)
                 }
-                viewModel.setDatePB(formatDate)
+                viewModel.setDatePB(getDateFormanPB(it))
+            } else if (view == binding.ibDatePickerNBU) {
+                viewModel.setDateNBU(getDateFormatNBU(it))
             }
+            viewColorStatePB.setBackgroundColor(Color.WHITE)
         }
     }
 
@@ -148,7 +160,7 @@ class CurrencyStateFragment : Fragment(){
             view.focusable = View.FOCUSABLE
             view.requestFocus()
             if (view.isFocusable) {
-                view.setBackgroundColor(Color.RED)
+                view.setBackgroundColor(Color.GRAY)
             }
         }
         findItemNBU(ccy)
@@ -156,19 +168,25 @@ class CurrencyStateFragment : Fragment(){
 
     // Find selected view from PB table and transform view from NBU
     private fun findItemNBU(ccy: String) {
-        viewColorStateNBU.setBackgroundColor(Color.WHITE )
+        viewColorStateNBU.setBackgroundColor(Color.WHITE)
         when (ccy) {
             "USD" -> {
-                val view = activity?.findViewById(R.id.tv_usd) as TableRow
-                transformView(view)
+                val view:View? = activity?.findViewById(R.id.tv_usd)
+                view?.let {
+                    transformView(it)
+                }
             }
             "EUR" -> {
-                val view = activity?.findViewById(R.id.tv_eur) as TableRow
-                transformView(view)
+                val view: View? = activity?.findViewById(R.id.tv_eur)
+                view?.let {
+                    transformView(it)
+                }
             }
             "RUB" -> {
-                val view = activity?.findViewById(R.id.tv_rur) as TableRow
-                transformView(view)
+                val view: View? = activity?.findViewById(R.id.tv_rur)
+                view?.let {
+                    transformView(it)
+                }
             }
         }
     }
@@ -209,13 +227,20 @@ class CurrencyStateFragment : Fragment(){
     // Dynamically create NBU table
     private fun addTablePB(responsePB: List<ExchangeRate>) {
 
+        if (binding.tlPrivatBank.childCount > 4) {
+            binding.tlPrivatBank.removeViews(3, 3)
+        }
+
         for (i in responsePB.indices) {
             val tableRow = TableRow(requireContext())
 
             // Create currency name TextView
             val tv1 = TextView(requireContext())
             tv1.text = responsePB[i].currency
-            tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
+            tv1.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                resources.getDimension(R.dimen.table_currency_pb_size)
+            )
             setTextViewParams(tv1)
 
             tableRow.addView(tv1)
@@ -223,7 +248,10 @@ class CurrencyStateFragment : Fragment(){
             // Create currency purchase rate TextView
             val tv2 = TextView(requireContext())
             tv2.text = roundDoubleTo(responsePB[i].purchaseRate, 3)
-            tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
+            tv2.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                resources.getDimension(R.dimen.table_currency_pb_size)
+            )
             setTextViewParams(tv2)
 
             tableRow.addView(tv2)
@@ -231,7 +259,10 @@ class CurrencyStateFragment : Fragment(){
             // Create currency sale rate TextView
             val tv3 = TextView(requireContext())
             tv3.text = roundDoubleTo(responsePB[i].saleRate, 3)
-            tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.table_currency_pb_size))
+            tv3.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                resources.getDimension(R.dimen.table_currency_pb_size)
+            )
             setTextViewParams(tv3)
 
             tableRow.addView(tv3)
@@ -248,13 +279,16 @@ class CurrencyStateFragment : Fragment(){
         textView.apply {
             setTextColor(Color.BLACK)
             gravity = Gravity.CENTER
-            layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)
+            layoutParams = TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.WRAP_CONTENT,
+                1f
+            )
         }
     }
 
-
     // Shows equal NBU currency to selected PB row
-    private fun transformView(view: View){
+    private fun transformView(view: View) {
         view.setBackgroundColor(Color.LTGRAY)
         viewColorStateNBU = view
         binding.svScrollViewNBU.scrollTo(0, view.top)
@@ -264,33 +298,65 @@ class CurrencyStateFragment : Fragment(){
         }
     }
 
-    // Checks the orientation of the screen
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-        with(binding) {
-
-            val llParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-            val tlParams = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT)
-            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-
-                llMainLinearLayout.orientation = LinearLayout.HORIZONTAL
-                llLinearLayoutNBU.layoutParams = LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,
-                    1f
-                )
-                tlPrivatBank.layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT,
-                    1f
-                )
-                svScrollViewNBU.layoutParams = llParams
-                tlParams.setMargins(20, 0, 0, 0)
-                tlNationalBankHeader?.layoutParams = tlParams
-            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                llMainLinearLayout.orientation = LinearLayout.VERTICAL
-                llLinearLayoutNBU.layoutParams = llParams
-                tlPrivatBank.layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT)
-                svScrollViewNBU.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            try {
+                val ft: FragmentTransaction = parentFragmentManager.beginTransaction()
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false)
+                }
+                ft.detach(this).attach(this).commit()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
+
+    // Checks the orientation of the screen
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        super.onConfigurationChanged(newConfig)
+//
+////        with(binding) {
+////
+////            val llParams = LinearLayout.LayoutParams(
+////                LinearLayout.LayoutParams.MATCH_PARENT,
+////                LinearLayout.LayoutParams.MATCH_PARENT
+////            )
+////            val tlParams = TableLayout.LayoutParams(
+////                TableLayout.LayoutParams.MATCH_PARENT,
+////                TableLayout.LayoutParams.WRAP_CONTENT
+////            )
+//            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                Toast.makeText(requireContext(), "landscape", Toast.LENGTH_SHORT).show()
+////
+////                llMainLinearLayout.orientation = LinearLayout.HORIZONTAL
+////                llLinearLayoutNBU.layoutParams = LinearLayout.LayoutParams(
+////                    TableLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,
+////                    1f
+////                )
+////                tlPrivatBank.layoutParams = TableLayout.LayoutParams(
+////                    TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT,
+////                    1f
+////                )
+////                svScrollViewNBU.layoutParams = llParams
+////                tlParams.setMargins(20, 0, 0, 0)
+////                tlNationalBankHeader?.layoutParams = tlParams
+//            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                Toast.makeText(requireContext(), "landscape", Toast.LENGTH_SHORT).show()
+////
+////                llMainLinearLayout.orientation = LinearLayout.VERTICAL
+////                llLinearLayoutNBU.layoutParams = llParams
+////                tlPrivatBank.layoutParams = TableLayout.LayoutParams(
+////                    TableLayout.LayoutParams.MATCH_PARENT,
+////                    TableLayout.LayoutParams.WRAP_CONTENT
+////                )
+////                svScrollViewNBU.layoutParams =
+////                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f)
+//            }
+//        }
+//    }
+
+
 }

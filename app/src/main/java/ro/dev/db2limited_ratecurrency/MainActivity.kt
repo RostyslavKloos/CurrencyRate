@@ -1,6 +1,8 @@
 package ro.dev.db2limited_ratecurrency
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.bnvBottomNav.setupWithNavController(navController)
         NavigationUI.setupActionBarWithNavController(this, navController)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

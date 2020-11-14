@@ -6,5 +6,8 @@
     <string name="Sale">Продажа</string>
     <string name="NBU">НБУ</string>
     <string name="date_picker_nbu">Date picker NBU</string>
+    <string name="date_picker_pb">Date picker PB</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

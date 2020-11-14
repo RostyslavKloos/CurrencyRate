@@ -12,8 +12,9 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import ro.dev.db2limited_ratecurrency.databinding.CurrencyGraphFragmentBinding
 import ro.dev.db2limited_ratecurrency.ui.viewmodel.CurrencyGraphViewModel
 import ro.dev.db2limited_ratecurrency.utills.Resource
-import ro.dev.db2limited_ratecurrency.utills.getCurrentDateTime
+import ro.dev.db2limited_ratecurrency.utills.getDateFormatNBU
 import ro.dev.db2limited_ratecurrency.utills.roundDoubleTo
+import java.util.*
 
 class CurrencyGraphFragment: Fragment() {
 
@@ -39,11 +40,11 @@ class CurrencyGraphFragment: Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.setDateNBU(getCurrentDateTime())
-        viewModel.currencyResponseNBUbyCode.observe(viewLifecycleOwner, {
-            when (it.status) {
+        viewModel.setDateNBU(getDateFormatNBU(Date()))
+        viewModel.currencyResponseNBUbyCode.observe(viewLifecycleOwner, { responseNBUbyCode ->
+            when (responseNBUbyCode.status) {
                 Resource.Status.SUCCESS -> {
-                    it.data?.let {
+                    responseNBUbyCode.data?.let {
                         binding.test.text = roundDoubleTo(it[0].rate, 2)
                         binding.pbProgressBarGraph.visibility = View.GONE
                         binding.gvGraph.visibility = View.VISIBLE
@@ -55,7 +56,7 @@ class CurrencyGraphFragment: Fragment() {
                 Resource.Status.ERROR -> {
                     binding.gvGraph.visibility = View.VISIBLE
                     binding.pbProgressBarGraph.visibility = View.GONE
-                    Toast.makeText(requireContext(), "${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "${responseNBUbyCode.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         })

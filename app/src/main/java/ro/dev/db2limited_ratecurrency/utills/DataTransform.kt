@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun roundDoubleTo(value: Double, scale: Int, mode: Int = BigDecimal.ROUND_HALF_UP): String {
-    return value.toBigDecimal().setScale(scale, BigDecimal.ROUND_DOWN).toPlainString()
+    return value.toBigDecimal().setScale(scale, mode).toPlainString()
 }
 
 fun <T> performGetOperation(networkCall: suspend () -> Resource<T>): LiveData<Resource<T>> =
@@ -25,12 +25,12 @@ fun <T> performGetOperation(networkCall: suspend () -> Resource<T>): LiveData<Re
         }
     }
 
-fun getCurrentDateTime(): String {
+fun getDateFormatNBU(obj: Any): String {
     val sdf = SimpleDateFormat("yyyyMMdd", Locale.ROOT)
-    return sdf.format(Date())
+    return sdf.format(obj)
 }
 
-fun getCurrentDateTimePB() : String {
+fun getDateFormanPB(obj: Any) : String {
     val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
-    return sdf.format(Date())
+    return sdf.format(obj)
 }
