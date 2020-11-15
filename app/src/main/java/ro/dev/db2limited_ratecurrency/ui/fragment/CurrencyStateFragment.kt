@@ -125,10 +125,7 @@ class CurrencyStateFragment : Fragment() {
 
     private fun setupViews() {
         binding.swipeContainer.setOnRefreshListener {
-            val currentDateTimeNBU = getDateFormatNBU(Date())
-            val currentDateTimePB = getDateFormanPB(Date())
-            viewModel.setDateNBU(currentDateTimeNBU)
-            viewModel.setDatePB(currentDateTimePB)
+            setCurrentDateTime()
         }
 
         // init temporary views for color replace
@@ -314,6 +311,18 @@ class CurrencyStateFragment : Fragment() {
         if (binding.tlPrivatBank.childCount > 4) {
             binding.tlPrivatBank.removeViews(4, 3)
         }
+    }
+
+    private fun setCurrentDateTime() {
+        val currentDateTimeNBU = getDateFormatNBU(Date())
+        val currentDateTimePB = getDateFormanPB(Date())
+        viewModel.setDateNBU(currentDateTimeNBU)
+        viewModel.setDatePB(currentDateTimePB)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setCurrentDateTime()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
