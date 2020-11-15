@@ -7,7 +7,12 @@
     <string name="NBU">НБУ</string>
     <string name="date_picker_nbu">Date picker NBU</string>
     <string name="date_picker_pb">Date picker PB</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hintOnErrorData">Use top swipe to reload data</string>
+    <string name="select_date">ВЫБЕРИТЕ ДАТУ</string>
+    <string name="material_date_picker">MATERIAL_DATE_PICKER</string>
+    <string name="USD">Долар США</string>
+    <string name="EUR">Євро</string>
+    <string name="RUB">Російський рубль</string>
+    <string name="graph_hint">not implemented yet</string>
 
 </resources>

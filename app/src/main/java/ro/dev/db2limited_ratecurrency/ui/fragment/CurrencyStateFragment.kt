@@ -1,7 +1,5 @@
 package ro.dev.db2limited_ratecurrency.ui.fragment
 
-import android.content.Context
-import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
@@ -42,7 +40,6 @@ class CurrencyStateFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,17 +48,21 @@ class CurrencyStateFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        // set currentDate
-        val currentDateTimeNBU = getDateFormatNBU(Date())
-        val currentDateTimePB = getDateFormanPB(Date())
-//        viewModel.setDateNBU(currentDateTimeNBU)
-//        viewModel.setDatePB(currentDateTimePB)
 
+        //Check for data refreshing
+        viewModel.getIsRefreshingDataPB().observe(viewLifecycleOwner, {isRefreshPB ->
+            viewModel.getIsRefreshingDataNBU().observe(viewLifecycleOwner, {
+                binding.swipeContainer.isRefreshing = isRefreshPB
+            })
+        })
+
+        //Observe privat bank state
         viewModel.getResponsePB().observe(viewLifecycleOwner, {
             val response = CurrencyMapper().mapFrom(it.exchangeRate)
             addTablePB(response)
         })
 
+        //Observe NBU state
         viewModel.getResponseNBU().observe(viewLifecycleOwner, {
             addTableNBU(it)
         })
@@ -78,11 +79,15 @@ class CurrencyStateFragment : Fragment() {
                     }
                 }
                 Resource.Status.LOADING -> {
+                    viewModel.isRefreshingLiveDataPB.value = false
+                    binding.tvHintPB.visibility = View.GONE
                     binding.pbProgressBarPB.visibility = View.VISIBLE
                 }
                 Resource.Status.ERROR -> {
-                    binding.tlPrivatBank.visibility = View.GONE
                     binding.pbProgressBarPB.visibility = View.GONE
+                    binding.tlPrivatBank.visibility = View.VISIBLE
+                    binding.tvHintPB.visibility = View.VISIBLE
+                    viewModel.isRefreshingLiveDataPB.value = false
                     Toast.makeText(requireContext(), "${responsePB.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -98,14 +103,19 @@ class CurrencyStateFragment : Fragment() {
                         binding.tvDateNBU.text = it[0].exchangedate
                         binding.pbProgressBarNBU.visibility = View.GONE
                         binding.svScrollViewNBU.visibility = View.VISIBLE
+                        viewModel.isRefreshingLiveDataNBU.value = false
                     }
                 }
                 Resource.Status.LOADING -> {
+                    viewModel.isRefreshingLiveDataNBU.value = false
+                    binding.tvHintNBU.visibility = View.GONE
                     binding.pbProgressBarNBU.visibility = View.VISIBLE
                 }
                 Resource.Status.ERROR -> {
                     binding.tlNationalBank.visibility = View.VISIBLE
                     binding.pbProgressBarNBU.visibility = View.GONE
+                    binding.tvHintNBU.visibility = View.VISIBLE
+                    viewModel.isRefreshingLiveDataNBU.value = false
                     Toast.makeText(requireContext(), "${responseNBU.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -114,6 +124,13 @@ class CurrencyStateFragment : Fragment() {
     }
 
     private fun setupViews() {
+        binding.swipeContainer.setOnRefreshListener {
+            val currentDateTimeNBU = getDateFormatNBU(Date())
+            val currentDateTimePB = getDateFormanPB(Date())
+            viewModel.setDateNBU(currentDateTimeNBU)
+            viewModel.setDatePB(currentDateTimePB)
+        }
+
         // init temporary views for color replace
         viewColorStatePB = binding.tvViewColorStatePB
         viewColorStateNBU = binding.tvViewColorStateNBU
@@ -131,17 +148,15 @@ class CurrencyStateFragment : Fragment() {
 
     private fun createDatePickerDialog(view: View) {
         val materialDateBuilder = MaterialDatePicker.Builder.datePicker()
-        materialDateBuilder.setTitleText("ВЫБЕРИТЕ ДАТУ")
+        materialDateBuilder.setTitleText(getString(R.string.select_date))
         val materialDatePicker = materialDateBuilder.build()
 
-        materialDatePicker.show(childFragmentManager, "MATERIAL_DATE_PICKER")
+        materialDatePicker.show(childFragmentManager, getString(R.string.material_date_picker))
         materialDatePicker.addOnPositiveButtonClickListener {
 
             //delete current items if exist
             if (view == binding.ibDatePickerPB) {
-                if (binding.tlPrivatBank.childCount > 4) {
-                    binding.tlPrivatBank.removeViews(3, 3)
-                }
+                checkPBTableChildCount()
                 viewModel.setDatePB(getDateFormanPB(it))
             } else if (view == binding.ibDatePickerNBU) {
                 viewModel.setDateNBU(getDateFormatNBU(it))
@@ -205,9 +220,9 @@ class CurrencyStateFragment : Fragment() {
 
             //check for necessary currency
             when (responseNBU[i].txt) {
-                "Долар США" -> tableRow.id = R.id.tv_usd
-                "Євро" -> tableRow.id = R.id.tv_eur
-                "Російський рубль" -> tableRow.id = R.id.tv_rur
+                getString(R.string.USD) -> tableRow.id = R.id.tv_usd
+                getString(R.string.EUR) -> tableRow.id = R.id.tv_eur
+                getString(R.string.RUB) -> tableRow.id = R.id.tv_rur
             }
 
             tableRow.addView(tv1)
@@ -226,10 +241,7 @@ class CurrencyStateFragment : Fragment() {
 
     // Dynamically create NBU table
     private fun addTablePB(responsePB: List<ExchangeRate>) {
-
-        if (binding.tlPrivatBank.childCount > 4) {
-            binding.tlPrivatBank.removeViews(3, 3)
-        }
+        checkPBTableChildCount()
 
         for (i in responsePB.indices) {
             val tableRow = TableRow(requireContext())
@@ -298,6 +310,12 @@ class CurrencyStateFragment : Fragment() {
         }
     }
 
+    private fun checkPBTableChildCount() {
+        if (binding.tlPrivatBank.childCount > 4) {
+            binding.tlPrivatBank.removeViews(4, 3)
+        }
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
@@ -313,50 +331,4 @@ class CurrencyStateFragment : Fragment() {
             }
         }
     }
-
-    // Checks the orientation of the screen
-//    override fun onConfigurationChanged(newConfig: Configuration) {
-//        super.onConfigurationChanged(newConfig)
-//
-////        with(binding) {
-////
-////            val llParams = LinearLayout.LayoutParams(
-////                LinearLayout.LayoutParams.MATCH_PARENT,
-////                LinearLayout.LayoutParams.MATCH_PARENT
-////            )
-////            val tlParams = TableLayout.LayoutParams(
-////                TableLayout.LayoutParams.MATCH_PARENT,
-////                TableLayout.LayoutParams.WRAP_CONTENT
-////            )
-//            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//                Toast.makeText(requireContext(), "landscape", Toast.LENGTH_SHORT).show()
-////
-////                llMainLinearLayout.orientation = LinearLayout.HORIZONTAL
-////                llLinearLayoutNBU.layoutParams = LinearLayout.LayoutParams(
-////                    TableLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT,
-////                    1f
-////                )
-////                tlPrivatBank.layoutParams = TableLayout.LayoutParams(
-////                    TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT,
-////                    1f
-////                )
-////                svScrollViewNBU.layoutParams = llParams
-////                tlParams.setMargins(20, 0, 0, 0)
-////                tlNationalBankHeader?.layoutParams = tlParams
-//            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-//                Toast.makeText(requireContext(), "landscape", Toast.LENGTH_SHORT).show()
-////
-////                llMainLinearLayout.orientation = LinearLayout.VERTICAL
-////                llLinearLayoutNBU.layoutParams = llParams
-////                tlPrivatBank.layoutParams = TableLayout.LayoutParams(
-////                    TableLayout.LayoutParams.MATCH_PARENT,
-////                    TableLayout.LayoutParams.WRAP_CONTENT
-////                )
-////                svScrollViewNBU.layoutParams =
-////                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f)
-//            }
-//        }
-//    }
-
-
 }

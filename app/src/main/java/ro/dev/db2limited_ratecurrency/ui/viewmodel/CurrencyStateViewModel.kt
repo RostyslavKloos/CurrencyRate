@@ -6,28 +6,11 @@ import ro.dev.db2limited_ratecurrency.data.model.responsePBbyDate.CurrencyRespon
 import ro.dev.db2limited_ratecurrency.data.remote.ApiClient
 import ro.dev.db2limited_ratecurrency.data.remote.RemoteDataSource
 import ro.dev.db2limited_ratecurrency.data.repository.CurrencyRepository
+import ro.dev.db2limited_ratecurrency.utills.Constants.STATE_NBU
+import ro.dev.db2limited_ratecurrency.utills.Constants.STATE_PB
 import ro.dev.db2limited_ratecurrency.utills.Resource
 
-const val STATE_PB = "PB_STATE"
-const val STATE_NBU = "NBU_STATE"
-
 class CurrencyStateViewModel(private val state: SavedStateHandle) : ViewModel() {
-
-    fun saveResponsePB(responsePBbyDate: CurrencyResponsePBbyDate) {
-        state.set(STATE_PB, responsePBbyDate)
-    }
-
-    fun getResponsePB() : LiveData<CurrencyResponsePBbyDate> {
-        return state.getLiveData(STATE_PB)
-    }
-
-    fun getResponseNBU() : LiveData<CurrencyResponseNBU> {
-        return state.getLiveData(STATE_NBU)
-    }
-
-    fun saveResponseNBU(responseNBU: CurrencyResponseNBU) {
-        state.set(STATE_NBU, responseNBU)
-    }
 
     private val remoteDataSource: RemoteDataSource = RemoteDataSource(ApiClient)
     private val repository: CurrencyRepository = CurrencyRepository(remoteDataSource)
@@ -41,26 +24,51 @@ class CurrencyStateViewModel(private val state: SavedStateHandle) : ViewModel() 
     private val _currencyResponseNBU = _dateNBU.switchMap { date ->
         repository.getCurrencyNBU(date)
     }
-//
-//    private val _tempViewPB = MutableLiveData<View>()
-//    private val _tempViewNBU = MutableLiveData<View>()
 
-    val currencyResponsePBbyDate: LiveData<Resource<CurrencyResponsePBbyDate>> = _currencyResponsePBbyDate
+    val currencyResponsePBbyDate: LiveData<Resource<CurrencyResponsePBbyDate>> =
+        _currencyResponsePBbyDate
     val currencyResponseNBU: LiveData<Resource<CurrencyResponseNBU>> = _currencyResponseNBU
+
+    val isRefreshingLiveDataPB: MutableLiveData<Boolean> = MutableLiveData()
+    val isRefreshingLiveDataNBU: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        isRefreshingLiveDataPB.value = false
+        isRefreshingLiveDataNBU.value = false
+    }
 
     fun setDatePB(date: String) {
         _datePB.value = date
+        isRefreshingLiveDataPB.value = true
     }
-
-//    fun setViewPB(view: View) {
-//        _tempViewPB.value = view
-//    }
-//
-//    fun setViewNBU(view: View) {
-//        _tempViewNBU.value = view
-//    }
 
     fun setDateNBU(date: String) {
         _dateNBU.value = date
+        isRefreshingLiveDataNBU.value = true
+    }
+
+    fun getIsRefreshingDataPB(): LiveData<Boolean> {
+        return isRefreshingLiveDataPB
+    }
+
+    fun getIsRefreshingDataNBU(): LiveData<Boolean> {
+        return isRefreshingLiveDataNBU
+    }
+
+
+    fun saveResponsePB(responsePBbyDate: CurrencyResponsePBbyDate) {
+        state.set(STATE_PB, responsePBbyDate)
+    }
+
+    fun getResponsePB(): LiveData<CurrencyResponsePBbyDate> {
+        return state.getLiveData(STATE_PB)
+    }
+
+    fun getResponseNBU(): LiveData<CurrencyResponseNBU> {
+        return state.getLiveData(STATE_NBU)
+    }
+
+    fun saveResponseNBU(responseNBU: CurrencyResponseNBU) {
+        state.set(STATE_NBU, responseNBU)
     }
 }

@@ -82,4 +82,7 @@ dependencies {
 
     // GraphView
     implementation 'com.jjoe64:graphview:4.2.2'
+
+    // Swipe refresh
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 }

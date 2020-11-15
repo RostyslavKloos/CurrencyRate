@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import ro.dev.db2limited_ratecurrency.databinding.CurrencyGraphFragmentBinding
 import ro.dev.db2limited_ratecurrency.ui.viewmodel.CurrencyGraphViewModel
-import ro.dev.db2limited_ratecurrency.utills.Resource
 import ro.dev.db2limited_ratecurrency.utills.getDateFormatNBU
-import ro.dev.db2limited_ratecurrency.utills.roundDoubleTo
 import java.util.*
 
 class CurrencyGraphFragment: Fragment() {
@@ -41,25 +38,25 @@ class CurrencyGraphFragment: Fragment() {
 
     private fun setupObservers() {
         viewModel.setDateNBU(getDateFormatNBU(Date()))
-        viewModel.currencyResponseNBUbyCode.observe(viewLifecycleOwner, { responseNBUbyCode ->
-            when (responseNBUbyCode.status) {
-                Resource.Status.SUCCESS -> {
-                    responseNBUbyCode.data?.let {
-                        binding.test.text = roundDoubleTo(it[0].rate, 2)
-                        binding.pbProgressBarGraph.visibility = View.GONE
-                        binding.gvGraph.visibility = View.VISIBLE
-                    }
-                }
-                Resource.Status.LOADING -> {
-                    binding.pbProgressBarGraph.visibility = View.VISIBLE
-                }
-                Resource.Status.ERROR -> {
-                    binding.gvGraph.visibility = View.VISIBLE
-                    binding.pbProgressBarGraph.visibility = View.GONE
-                    Toast.makeText(requireContext(), "${responseNBUbyCode.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+//        viewModel.currencyResponseNBUbyCode.observe(viewLifecycleOwner, { responseNBUbyCode ->
+//            when (responseNBUbyCode.status) {
+//                Resource.Status.SUCCESS -> {
+//                    responseNBUbyCode.data?.let {
+//                        binding.test.text = roundDoubleTo(it[0].rate, 2)
+//                        binding.pbProgressBarGraph.visibility = View.GONE
+//                        binding.gvGraph.visibility = View.VISIBLE
+//                    }
+//                }
+//                Resource.Status.LOADING -> {
+//                    binding.pbProgressBarGraph.visibility = View.VISIBLE
+//                }
+//                Resource.Status.ERROR -> {
+//                    binding.gvGraph.visibility = View.VISIBLE
+//                    binding.pbProgressBarGraph.visibility = View.GONE
+//                    Toast.makeText(requireContext(), "${responseNBUbyCode.message}", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        })
     }
 
     private fun setupViews() {
