@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">DB2Limited_RateCurrency</string>
     <string name="Privat_Bank">Приват Банк</string>
-    <string name="Currency">Валюта</string>
     <string name="Purchase">Покупка</string>
     <string name="Sale">Продажа</string>
     <string name="NBU">НБУ</string>
@@ -14,5 +13,12 @@
     <string name="EUR">Євро</string>
     <string name="RUB">Російський рубль</string>
     <string name="graph_hint">not implemented yet</string>
+    <string name="select_date_hint">Выберите даты для построения графика</string>
+    <string name="date_example">01.01.2020</string>
+    <string name="date_exampleCBR">01/01/2020</string>
+    <string name="graphic">График</string>
+    <string name="rate_currency">Курсы валют</string>
+    <string name="rub_usd_rate">Курс рубля к доллару</string>
+    <string name="Currency">Валюта</string>
 
 </resources>

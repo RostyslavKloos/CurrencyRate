@@ -73,7 +73,7 @@ class CurrencyStateFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     responsePB.data?.let {
                         viewModel.saveResponsePB(it)
-                        binding.tvDatePB.text = it.date
+                        binding.etDatePB.setText(it.date)
                         binding.pbProgressBarPB.visibility = View.GONE
                         binding.tlPrivatBank.visibility = View.VISIBLE
                     }
@@ -100,9 +100,9 @@ class CurrencyStateFragment : Fragment() {
                 Resource.Status.SUCCESS -> {
                     responseNBU.data?.let {
                         viewModel.saveResponseNBU(it)
-                        binding.tvDateNBU.text = it[0].exchangedate
+                        binding.etDateNBU.setText(it[0].exchangedate)
                         binding.pbProgressBarNBU.visibility = View.GONE
-                        binding.svScrollViewNBU.visibility = View.VISIBLE
+                        binding.nsvScrollViewNBU.visibility = View.VISIBLE
                         viewModel.isRefreshingLiveDataNBU.value = false
                     }
                 }
@@ -133,12 +133,12 @@ class CurrencyStateFragment : Fragment() {
         viewColorStateNBU = binding.tvViewColorStateNBU
 
         // Create datePicker NBU
-        binding.ibDatePickerNBU.setOnClickListener {
+        binding.etDateNBU.setOnClickListener {
             createDatePickerDialog(it)
         }
 
         // Create datePicker PB
-        binding.ibDatePickerPB.setOnClickListener {
+        binding.etDatePB.setOnClickListener {
             createDatePickerDialog(it)
         }
     }
@@ -152,10 +152,10 @@ class CurrencyStateFragment : Fragment() {
         materialDatePicker.addOnPositiveButtonClickListener {
 
             //delete current items if exist
-            if (view == binding.ibDatePickerPB) {
+            if (view == binding.etDatePB) {
                 checkPBTableChildCount()
-                viewModel.setDatePB(getDateFormanPB(it))
-            } else if (view == binding.ibDatePickerNBU) {
+                viewModel.setDatePB(getDateFormatPB(it))
+            } else if (view == binding.etDateNBU) {
                 viewModel.setDateNBU(getDateFormatNBU(it))
             }
             viewColorStatePB.setBackgroundColor(Color.WHITE)
@@ -300,11 +300,8 @@ class CurrencyStateFragment : Fragment() {
     private fun transformView(view: View) {
         view.setBackgroundColor(Color.LTGRAY)
         viewColorStateNBU = view
-        binding.svScrollViewNBU.scrollTo(0, view.top)
-        if (Build.VERSION.SDK_INT >= 29) {
-            binding.svScrollViewNBU.scrollToDescendant(view)
-            view.setBackgroundColor(Color.LTGRAY)
-        }
+        binding.nsvScrollViewNBU.scrollTo(0, view.top)
+
     }
 
     private fun checkPBTableChildCount() {
@@ -315,7 +312,7 @@ class CurrencyStateFragment : Fragment() {
 
     private fun setCurrentDateTime() {
         val currentDateTimeNBU = getDateFormatNBU(Date())
-        val currentDateTimePB = getDateFormanPB(Date())
+        val currentDateTimePB = getDateFormatPB(Date())
         viewModel.setDateNBU(currentDateTimeNBU)
         viewModel.setDatePB(currentDateTimePB)
     }

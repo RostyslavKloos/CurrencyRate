@@ -26,11 +26,24 @@ fun <T> performGetOperation(networkCall: suspend () -> Resource<T>): LiveData<Re
     }
 
 fun getDateFormatNBU(obj: Any): String {
-    val sdf = SimpleDateFormat("yyyyMMdd", Locale.ROOT)
+    return dateFormatBuild(obj, "yyyyMMdd")
+}
+
+fun getDateFormatPB(obj: Any): String{
+    return dateFormatBuild(obj, "dd.MM.yyyy")
+}
+
+fun getDateGraph(obj: Any): String{
+    return dateFormatBuild(obj,"dd.MM")
+}
+
+fun getDateFormatCBR(obj: Any): String{
+    return dateFormatBuild(obj, "dd/MM/yyyy")
+}
+
+fun dateFormatBuild(obj: Any, format: String): String {
+    val sdf = SimpleDateFormat(format, Locale.ROOT)
     return sdf.format(obj)
 }
 
-fun getDateFormanPB(obj: Any) : String {
-    val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.ROOT)
-    return sdf.format(obj)
-}
+

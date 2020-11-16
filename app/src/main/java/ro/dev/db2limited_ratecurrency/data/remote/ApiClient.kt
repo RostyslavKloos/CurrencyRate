@@ -5,8 +5,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import ro.dev.db2limited_ratecurrency.data.remote.service.IApiServiceCBR
 import ro.dev.db2limited_ratecurrency.data.remote.service.IApiServiceNBU
 import ro.dev.db2limited_ratecurrency.data.remote.service.IApiServicePB
+import ro.dev.db2limited_ratecurrency.utills.Constants.BASE_URL_CBR
 import ro.dev.db2limited_ratecurrency.utills.Constants.BASE_URL_NBU
 import ro.dev.db2limited_ratecurrency.utills.Constants.BASE_URL_PB
 
@@ -47,10 +50,31 @@ object ApiClient {
             .build()
     }
 
+    private fun retrofitCBR(): Retrofit {
+
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
+
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(BASE_URL_CBR)
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addConverterFactory(SimpleXmlConverterFactory.create())
+            .build()
+    }
+
     val retrofitServicePB: IApiServicePB by lazy {
         retrofitPB().create(IApiServicePB::class.java)
     }
     val retrofitServiceNBU: IApiServiceNBU by lazy {
         retrofitNBU().create(IApiServiceNBU::class.java)
+    }
+
+    val retrofitServiceCBR: IApiServiceCBR by lazy {
+        retrofitCBR().create(IApiServiceCBR::class.java)
     }
 }

@@ -37,38 +37,36 @@
                 android:id="@+id/tl_privatBank"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
+                android:layout_marginTop="@dimen/table_padding"
+                android:paddingLeft="@dimen/small_padding"
+                android:paddingRight="@dimen/small_padding">
 
-                <TableRow android:padding="10dp">
+                <TableRow>
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_column="0"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="@string/Privat_Bank" />
 
-                    <ImageButton
-                        android:id="@+id/ib_datePickerPB"
+                    <ImageView
+                        android:id="@+id/iv_datePickerPB"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_column="2"
-                        android:layout_gravity="end"
+                        android:layout_height="@dimen/image_height"
+                        android:layout_gravity="end|center_vertical"
                         android:backgroundTint="@color/white"
-                        android:contentDescription="@string/date_picker_pb"
+                        android:contentDescription="@string/date_picker_nbu"
                         android:src="@drawable/ic_baseline_calendar_today_24" />
 
-                    <TextView
-                        android:id="@+id/tv_datePB"
+                    <EditText
+                        android:id="@+id/et_datePB"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_column="3"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:gravity="center_vertical" />
-
+                        android:editable="false"
+                        android:hint="@string/date_example"
+                        android:textAlignment="textEnd" />
                 </TableRow>
 
                 <TextView
@@ -84,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#F0F7F7"
-                    android:padding="5dp">
+                    android:padding="@dimen/small_padding">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -125,37 +123,37 @@
                     android:id="@+id/tl_NationalBankHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp">
+                    android:layout_marginTop="@dimen/table_padding"
+                    android:paddingLeft="@dimen/small_padding"
+                    android:paddingRight="@dimen/small_padding">
 
-                    <TableRow android:padding="10dp">
+                    <TableRow>
 
                         <TextView
                             android:id="@+id/tv_test"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
                             android:gravity="center_vertical"
                             android:text="@string/NBU" />
 
-                        <ImageButton
-                            android:id="@+id/ib_datePickerNBU"
+                        <ImageView
+                            android:id="@+id/iv_datePickerNBU"
                             android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center"
+                            android:layout_height="@dimen/image_height"
+                            android:layout_gravity="center_vertical|end"
                             android:backgroundTint="@color/white"
                             android:contentDescription="@string/date_picker_nbu"
                             android:src="@drawable/ic_baseline_calendar_today_24" />
 
-                        <TextView
-                            android:id="@+id/tv_dateNBU"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                        <EditText
+                            android:id="@+id/et_dateNBU"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:gravity="center_vertical" />
+                            android:editable="false"
+                            android:hint="@string/date_example"
+                            android:textAlignment="textEnd" />
                     </TableRow>
 
                     <TextView
@@ -174,8 +172,8 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone" />
 
-                <ScrollView
-                    android:id="@+id/sv_scrollViewNBU"
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nsv_scrollViewNBU"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="center"
@@ -186,13 +184,11 @@
                         android:id="@+id/tl_NationalBank"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp">
+                        android:padding="@dimen/table_padding">
 
                     </TableLayout>
-                </ScrollView>
+                </androidx.core.widget.NestedScrollView>
             </LinearLayout>
         </LinearLayout>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

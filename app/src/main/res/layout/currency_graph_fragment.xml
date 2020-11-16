@@ -1,33 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_dateStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:gravity="center_vertical"
+        android:hint="@string/date_example"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_dateStart"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/image_height"
+        android:layout_gravity="start"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/date_picker_pb"
+        android:src="@drawable/ic_baseline_calendar_today_24"
+        app:layout_constraintBottom_toBottomOf="@+id/et_dateStart"
+        app:layout_constraintStart_toEndOf="@+id/et_dateStart"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_dateEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/image_height"
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/date_picker_pb"
+        android:src="@drawable/ic_baseline_calendar_today_24"
+        app:layout_constraintBottom_toBottomOf="@+id/et_dateEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_dateEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:editable="false"
+        android:gravity="center_vertical"
+        android:hint="@string/date_exampleCBR"
+        app:layout_constraintEnd_toStartOf="@+id/iv_dateEnd"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_graphHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/select_date_hint"
+        android:textAlignment="center"
+        android:textSize="@dimen/hint_text"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/pb_progressBarGraph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/gv_graph"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/graph_margin"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499"
-        tools:layout_editor_absoluteX="74dp" />
-
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/graph_hint"
-        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

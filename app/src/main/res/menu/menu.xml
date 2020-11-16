@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/currencyStateFragment"
         android:icon="@drawable/ic_baseline_account_balance_24"
-        android:title="main"
-        />
+        android:title="@string/rate_currency" />
 
     <item
         android:id="@+id/currencyGraphFragment"
         android:icon="@drawable/ic_baseline_align_vertical_bottom_24"
-        android:title="graphic"
-        />
-
+        android:title="@string/graphic" />
 </menu>

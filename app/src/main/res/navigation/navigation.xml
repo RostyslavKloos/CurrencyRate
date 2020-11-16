@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
     app:startDestination="@id/currencyStateFragment">
 
     <fragment
         android:id="@+id/currencyStateFragment"
         android:name="ro.dev.db2limited_ratecurrency.ui.fragment.CurrencyStateFragment"
-        android:label="CurrencyStateFragment" />
+        android:label="@string/rate_currency" />
 
     <fragment
         android:id="@+id/currencyGraphFragment"
         android:name="ro.dev.db2limited_ratecurrency.ui.fragment.CurrencyGraphFragment"
-        android:label="CurrencyGraphFragment" />
+        android:label="@string/rub_usd_rate" />
 </navigation>
