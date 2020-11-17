@@ -1,7 +1,7 @@
 # CurrencyRate
 
 
-A CurrencyRate app that loads information from [NBU API](https://bank.gov.ua/ua/open-data/api-dev), [PrivatBank Api] (https://api.privatbank.ua/), [CBR bank API] (http://www.cbr.ru/development/sxml/),
+A CurrencyRate app that loads information from [NBU API] (https://bank.gov.ua/ua/open-data/api-dev), [PrivatBank Api] (https://api.privatbank.ua/), [CBR bank API] (http://www.cbr.ru/development/sxml/),
 
 to show one approach to using some of the best practices in Android Development.
 
