@@ -16,11 +16,11 @@ Including:
  * Swiperefreshlayout
 
 <p>
-<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_currency_main2.png" width="190">
-<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_currency_land.png" width="500">
+<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_currency_main2.png" width="260">
+<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_currency_land.png" width="400">
 
-<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_graph_result.png" width="190">
-<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_graph_land.png" width="500">
+<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_graph_result.png" width="260">
+<img src="https://github.com/RostyslavKloos/CurrencyRate/blob/master/assets/rate_graph_land.png" width="400">
  </p>
 
 #### The app has following packages:
