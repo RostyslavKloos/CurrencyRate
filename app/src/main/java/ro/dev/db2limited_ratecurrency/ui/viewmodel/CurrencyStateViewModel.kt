@@ -1,20 +1,16 @@
 package ro.dev.db2limited_ratecurrency.ui.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import ro.dev.db2limited_ratecurrency.data.model.responseNBU.CurrencyResponseNBU
-import ro.dev.db2limited_ratecurrency.data.model.responsePBbyDate.CurrencyResponsePBbyDate
-import ro.dev.db2limited_ratecurrency.data.remote.ApiClient
-import ro.dev.db2limited_ratecurrency.data.remote.RemoteDataSource
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseNBU.CurrencyResponseNBU
+import ro.dev.db2limited_ratecurrency.data.domain.model.responsePBbyDate.CurrencyResponsePBbyDate
 import ro.dev.db2limited_ratecurrency.data.repository.CurrencyRepository
 import ro.dev.db2limited_ratecurrency.utills.Constants.STATE_NBU
 import ro.dev.db2limited_ratecurrency.utills.Constants.STATE_PB
 import ro.dev.db2limited_ratecurrency.utills.Resource
 
-class CurrencyStateViewModel(private val state: SavedStateHandle) : ViewModel() {
-
-    private val remoteDataSource: RemoteDataSource = RemoteDataSource(ApiClient)
-    private val repository: CurrencyRepository = CurrencyRepository(remoteDataSource)
-
+class CurrencyStateViewModel @ViewModelInject constructor(repository: CurrencyRepository) : ViewModel() {
+    private val state: SavedStateHandle = SavedStateHandle()
     private val _datePB = MutableLiveData<String>()
     private val _currencyResponsePBbyDate = _datePB.switchMap { date ->
         repository.getCurrencyPBbyDate(date)

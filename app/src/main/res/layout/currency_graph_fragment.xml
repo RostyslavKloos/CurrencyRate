@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:editable="false"
         android:gravity="center_vertical"
-        android:hint="@string/date_example"
+        android:hint="@string/date_exampleCBR"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

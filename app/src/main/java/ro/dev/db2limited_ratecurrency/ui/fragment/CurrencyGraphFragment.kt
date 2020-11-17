@@ -11,12 +11,14 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
+import dagger.hilt.android.AndroidEntryPoint
 import ro.dev.db2limited_ratecurrency.R
-import ro.dev.db2limited_ratecurrency.data.model.responseCBR.DateParamsCBR
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseCBR.DateParamsCBR
 import ro.dev.db2limited_ratecurrency.databinding.CurrencyGraphFragmentBinding
 import ro.dev.db2limited_ratecurrency.ui.viewmodel.CurrencyGraphViewModel
 import ro.dev.db2limited_ratecurrency.utills.*
 
+@AndroidEntryPoint
 class CurrencyGraphFragment : Fragment() {
 
     private var _binding: CurrencyGraphFragmentBinding? = null

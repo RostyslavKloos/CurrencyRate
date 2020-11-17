@@ -1,8 +1,8 @@
 package ro.dev.db2limited_ratecurrency.utills
 
 import com.jjoe64.graphview.series.DataPoint
-import ro.dev.db2limited_ratecurrency.data.model.responseCBR.Record
-import ro.dev.db2limited_ratecurrency.data.model.responsePBbyDate.ExchangeRate
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseCBR.Record
+import ro.dev.db2limited_ratecurrency.data.domain.model.responsePBbyDate.ExchangeRate
 import java.text.SimpleDateFormat
 import java.util.*
 

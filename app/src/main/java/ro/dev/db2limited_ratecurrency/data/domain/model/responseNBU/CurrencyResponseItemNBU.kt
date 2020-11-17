@@ -1,4 +1,4 @@
-package ro.dev.db2limited_ratecurrency.data.model.responseNBU
+package ro.dev.db2limited_ratecurrency.data.domain.model.responseNBU
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

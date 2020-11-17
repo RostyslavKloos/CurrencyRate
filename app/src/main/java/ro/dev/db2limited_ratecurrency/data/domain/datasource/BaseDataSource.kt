@@ -1,4 +1,4 @@
-package ro.dev.db2limited_ratecurrency.data.remote
+package ro.dev.db2limited_ratecurrency.data.domain.datasource
 
 import retrofit2.Response
 import ro.dev.db2limited_ratecurrency.utills.Resource

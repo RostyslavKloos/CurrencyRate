@@ -1,4 +1,4 @@
-package ro.dev.db2limited_ratecurrency.data.model.responsePBbyDate
+package ro.dev.db2limited_ratecurrency.data.domain.model.responsePBbyDate
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

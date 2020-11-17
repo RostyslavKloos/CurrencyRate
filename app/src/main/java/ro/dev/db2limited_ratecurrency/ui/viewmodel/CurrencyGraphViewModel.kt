@@ -1,20 +1,13 @@
 package ro.dev.db2limited_ratecurrency.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
-import ro.dev.db2limited_ratecurrency.data.model.responseCBR.DateParamsCBR
-import ro.dev.db2limited_ratecurrency.data.model.responseCBR.ValCurs
-import ro.dev.db2limited_ratecurrency.data.remote.ApiClient
-import ro.dev.db2limited_ratecurrency.data.remote.RemoteDataSource
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseCBR.DateParamsCBR
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseCBR.ValCurs
 import ro.dev.db2limited_ratecurrency.data.repository.CurrencyRepository
 import ro.dev.db2limited_ratecurrency.utills.Resource
 
-class CurrencyGraphViewModel : ViewModel() {
-
-    private val remoteDataSource: RemoteDataSource = RemoteDataSource(ApiClient)
-    private val repository: CurrencyRepository = CurrencyRepository(remoteDataSource)
+class CurrencyGraphViewModel @ViewModelInject constructor(repository: CurrencyRepository) : ViewModel() {
 
     private val _startDate = MutableLiveData<String>()
     val startDate get() = _startDate

@@ -16,14 +16,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
+import dagger.hilt.android.AndroidEntryPoint
 import ro.dev.db2limited_ratecurrency.R
-import ro.dev.db2limited_ratecurrency.data.model.responseNBU.CurrencyResponseNBU
-import ro.dev.db2limited_ratecurrency.data.model.responsePBbyDate.ExchangeRate
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseNBU.CurrencyResponseNBU
+import ro.dev.db2limited_ratecurrency.data.domain.model.responsePBbyDate.ExchangeRate
 import ro.dev.db2limited_ratecurrency.databinding.CurrencyStateFragmentBinding
 import ro.dev.db2limited_ratecurrency.ui.viewmodel.CurrencyStateViewModel
 import ro.dev.db2limited_ratecurrency.utills.*
 import java.util.*
 
+@AndroidEntryPoint
 class CurrencyStateFragment : Fragment() {
     private var _binding: CurrencyStateFragmentBinding? = null
     private val binding get() = _binding!!

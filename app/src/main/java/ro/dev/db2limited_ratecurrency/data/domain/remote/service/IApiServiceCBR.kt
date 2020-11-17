@@ -1,10 +1,9 @@
-package ro.dev.db2limited_ratecurrency.data.remote.service
+package ro.dev.db2limited_ratecurrency.data.domain.remote.service
 
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ro.dev.db2limited_ratecurrency.data.model.responseCBR.ValCurs
-
+import ro.dev.db2limited_ratecurrency.data.domain.model.responseCBR.ValCurs
 
 /*
 http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=01/04/2011&date_req2=27/04/2011&VAL_NM_RQ=R01235

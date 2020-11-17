@@ -1,4 +1,4 @@
-package ro.dev.db2limited_ratecurrency.data.model.responseCBR
+package ro.dev.db2limited_ratecurrency.data.domain.model.responseCBR
 
 import org.simpleframework.xml.Attribute
 import org.simpleframework.xml.Element

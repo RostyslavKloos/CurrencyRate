@@ -1,6 +1,6 @@
 package ro.dev.db2limited_ratecurrency.data.repository
 
-import ro.dev.db2limited_ratecurrency.data.remote.RemoteDataSource
+import ro.dev.db2limited_ratecurrency.data.domain.datasource.RemoteDataSource
 import ro.dev.db2limited_ratecurrency.utills.performGetOperation
 
 class CurrencyRepository(private val remoteDataSource: RemoteDataSource) {
